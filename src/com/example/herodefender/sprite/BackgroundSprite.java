@@ -2,12 +2,14 @@ package com.example.herodefender.sprite;
 
 import android.graphics.Canvas;
 
+import com.example.herodefender.GameConsts;
 import com.example.herodefender.config.ImageConfig;
 
 public class BackgroundSprite extends Sprite
 {
 	public static final int GAME = 1;
 	public static final int LOBBY=2;
+	public static final int BARRIER=3;
 	public BackgroundSprite(ImageConfig imageConfig)
 	{
 		super(imageConfig);
@@ -24,6 +26,9 @@ public class BackgroundSprite extends Sprite
 		{
 			this.drawImage(canvas, ImageConfig.BACKGROUND_LOBBY, x, y);
 		}
+		else if(state==BARRIER)
+		{
+			this.drawTile(canvas, ImageConfig.BACKGROUND_BARRIER, x, y, 2, 2);
+		}
 	}
-
 }

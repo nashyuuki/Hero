@@ -27,6 +27,7 @@ public class DoorSprite extends Sprite
 	{
 		if (state == UP)
 		{
+			this.nextScriptInt(GameConsts.DOOR_UP_SCRIPT.length);
 			this.setCollisionArea(GameConsts.DOOR_COLLISION[0]);
 		}
 		else if (state == UP_MID)
@@ -47,6 +48,7 @@ public class DoorSprite extends Sprite
 		}
 		else if (state == MID)
 		{
+			this.nextScriptInt(GameConsts.DOOR_MID_SCRIPT.length);
 			this.setCollisionArea(GameConsts.DOOR_COLLISION[1]);
 		}
 		else if (state == MID_DOWN)
@@ -67,32 +69,41 @@ public class DoorSprite extends Sprite
 		}
 		else if (state == DOWN)
 		{
+			this.nextScriptInt(GameConsts.DOOR_DOWN_SCRIPT.length);
 			this.setCollisionArea(GameConsts.DOOR_COLLISION[2]);
 		}
 	}
-
-	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == UP)
 		{
-			this.drawImage(canvas, ImageConfig.DOOR_UP, x, y);
+			this.drawImage(canvas, GameConsts.DOOR_UP_SCRIPT[scriptInt], 
+			               x+GameConsts.DOOR_DIS_POSITION[0][0], 
+			               y+GameConsts.DOOR_DIS_POSITION[0][1]);
 		}
 		else if (state == UP_MID || state == MID_UP)
 		{
-			this.drawImage(canvas, ImageConfig.DOOR_MOVE_UP, x, y);
+			this.drawImage(canvas, ImageConfig.DOOR_MOVE_UP, 
+			               x+GameConsts.DOOR_DIS_POSITION[1][0], 
+			               y+GameConsts.DOOR_DIS_POSITION[1][1]);
 		}
 		else if (state == MID)
 		{
-			this.drawImage(canvas, ImageConfig.DOOR_MID, x, y);
+			this.drawImage(canvas, GameConsts.DOOR_MID_SCRIPT[scriptInt], 
+			               x+GameConsts.DOOR_DIS_POSITION[2][0], 
+			               y+GameConsts.DOOR_DIS_POSITION[2][1]);
 		}
 		else if (state == MID_DOWN || state == DOWN_MID)
 		{
-			this.drawImage(canvas, ImageConfig.DOOR_MOVE_DOWN, x, y);
+			this.drawImage(canvas, ImageConfig.DOOR_MOVE_DOWN, 
+			               x+GameConsts.DOOR_DIS_POSITION[3][0], 
+			               y+GameConsts.DOOR_DIS_POSITION[3][1]);
 		}
 		else if (state == DOWN)
 		{
-			this.drawImage(canvas, ImageConfig.DOOR_DOWN, x, y);
+			this.drawImage(canvas, GameConsts.DOOR_DOWN_SCRIPT[scriptInt], 
+			               x+GameConsts.DOOR_DIS_POSITION[4][0], 
+			               y+GameConsts.DOOR_DIS_POSITION[4][1]);
 		}
 	}
 

@@ -14,6 +14,10 @@ public class ButtonSprite extends Sprite
 	public static final int TYPE_TEAM=1;
 	public static final int TYPE_EXIT=2;
 	public static final int TYPE_MUSIC=3;
+	public static final int TYPE_TRIANGLE_LEFT=4;
+	public static final int TYPE_TRIANGLE_RIGHT=5;
+	public static final int TYPE_START_B=6;
+	public static final int TYPE_BACK=7;
 	private int type;
 	public ButtonSprite(ImageConfig imageConfig)
 	{
@@ -53,6 +57,4 @@ public class ButtonSprite extends Sprite
 	{
 		this.type = type;
 	}
-	
-	
 }

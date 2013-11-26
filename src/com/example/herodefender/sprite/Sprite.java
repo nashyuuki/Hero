@@ -134,18 +134,21 @@ public class Sprite
 
 	public boolean isCollision(int x, int y)
 	{
+		return this.isCollision(x, y, scaleArea);
+	}
+	public boolean isCollision(int x, int y,int[] area)
+	{
 		int x0, y0, x1, y1;
-		x0 = this.scaleArea[0] + this.getX();
-		y0 = this.scaleArea[1] + this.getY();
-		x1 = this.scaleArea[2] + this.getX();
-		y1 = this.scaleArea[3] + this.getY();
+		x0 = area[0] + this.getX();
+		y0 = area[1] + this.getY();
+		x1 = area[2] + this.getX();
+		y1 = area[3] + this.getY();
 		if (x > x0 && x < x1 && y > y0 && y < y1)
 		{
 			return true;
 		}
 		return false;
 	}
-
 	public Drawable getDrawable(int image)
 	{
 		return imageConfig.getDrawable(image);
@@ -160,7 +163,15 @@ public class Sprite
 	{
 		return this.getDrawable(image).getIntrinsicHeight();
 	}
-
+	public void drawRoundRect(Canvas canvas,int x1,int y1,int x2,int y2,int a, int r, int g, int b,int strokeWidth)
+	{
+		DrawUtil.drawRoundRect(canvas,x1,y1,x2,y2,a, r, g, b,strokeWidth);
+	}
+	public void drawTile(Canvas canvas, int image, int x, int y,int w,int h)
+	{
+		Drawable drawable = this.getDrawable(image);
+		DrawUtil.drawTile(canvas, drawable, x, y, w, h);
+	}
 	public void drawImage(Canvas canvas, int image, int x, int y, int width, int height, int frameInt, float scaleX, float scaleY)
 	{
 		Drawable drawable = this.getDrawable(image);

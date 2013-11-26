@@ -2,8 +2,11 @@ package com.example.herodefender;
 
 import com.example.herodefender.config.ImageConfig;
 import com.example.herodefender.sprite.ButtonSprite;
+import com.example.herodefender.sprite.FrameSprite;
 import com.example.herodefender.sprite.MonsterSprite;
+import com.example.herodefender.sprite.RoleSprite;
 import com.example.herodefender.sprite.WallSprite;
+import com.example.herodefender.sprite.WordSprite;
 
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -19,13 +22,14 @@ public class GameConsts
 	public static final int ARROW_ATTACK = 3;
 	public static final int MONSTER_HP = 100;
 	public static final int MONSTER_ATTACK = 3;
-	public static final int HERO_MP = 100;
-	public static final int AIR_MP = 50;
+	public static final int HERO_MP = 10;
+	public static final int AIR_MP = 10;
 	public static final int ARROW_SPEED = 3;
 	public static final int AIR_SPEED = 3;
-	public static final int WOUND_MULTIPLE = 20;
+	public static final int WOUND_BIG_MULTIPLE = 20;
+	public static final int WOUND_MID_MULTIPLE = 3;
 	public static final int MONSTER_SPEED = 20;
-	public static final int BOMB_INT=3;
+	public static final int BOMB_INT = 3;
 
 	// public static final int[][] BARRIER_SET=
 	// {
@@ -41,62 +45,170 @@ public class GameConsts
 	// {48,MonsterSprite.TYPE_VAMPIRE,0},
 	//
 	// };
-	public static final int[] BUTTON_TYPE=
-			{
+	public static final int[] BUTTON_TYPE =
+		{
 				ImageConfig.BUTTON_START01,
 				ImageConfig.BUTTON_TEAM01,
 				ImageConfig.BUTTON_EXIT01,
 				ImageConfig.BUTTON_MUSIC01,
+				ImageConfig.BUTTON_TRIANGLE_LEFT01,
+				ImageConfig.BUTTON_TRIANGLE_RIGHT01,
+				ImageConfig.BUTTON_START_B01,
+				ImageConfig.BUTTON_BACK01,};
+	public static final int[][] LOBBY_BUTTON_COLLISION =
+		{
+			{0,0,487,141},
+			{0,0,487,141},
+			{0,0,487,141},
+			{0,0,230,141}};
+	public static final int[][] LOBBY_BUTTON_POSITION =
+		{
+			{ButtonSprite.TYPE_START,440,350},
+			{ButtonSprite.TYPE_TEAM,440,490},
+			{ButtonSprite.TYPE_EXIT,440,630},
+			{ButtonSprite.TYPE_MUSIC,1060,640},};
+	public static final int[][] BARRIER_BUTTON_COLLISION =
+		{
+			{0,0,101,106},
+			{0,0,101,106},
+			{0,0,380,155},
+			{0,0,156,154},};
+	public static final int[] FRAME_POSITION =
+		{893,738,255,0,0,0,15};
+	public static final int[][] BARRIER_FRAME_POSITION =
+		{
+			{FrameSprite.BIG,13,7},
+//			{FrameSprite.PICK,906,0},
+//			{FrameSprite.PICK,906,200},
+//			{FrameSprite.PICK,906,400},
 			};
-	public static final int[][] LOBBY_BUTTON_COLLISION=
+	public static final int[][] BARRIER_WORD_POSITION =
+		{
+			{WordSprite.WORD_BARRIER,273,628},
+			{WordSprite.WORD_WEAPON,1135,204},};
+	public static final int[][] ROLE_POSITION=
 			{
-				{0,0,487,141},
-				{0,0,487,141},
-				{0,0,487,141},
-				{0,0,230,141}
+				{0,0},
+				{0,0},
+				{-73,-20},
 			};
-	public static final int[][] LOBBY_BUTTON_POSITION=
+	public static final int[] BARRIER_NUMBER_POSITION=
 			{
-				{ButtonSprite.TYPE_START,440,350},
-				{ButtonSprite.TYPE_TEAM,440,490},
-				{ButtonSprite.TYPE_EXIT,440,630},
-				{ButtonSprite.TYPE_MUSIC,1060,640},
+				430,633
 			};
-	public static final int[][] BUTTON_PUSH_SCRIPT=
+	public static final int[][] BARRIER_ROLE_SCRIPT =
+		{
+					{
+							ImageConfig.ROLE_VAMPIRE01,
+							ImageConfig.ROLE_VAMPIRE02,
+							ImageConfig.ROLE_VAMPIRE03,
+							ImageConfig.ROLE_VAMPIRE04},
+					{
+							ImageConfig.ROLE_WEREWOLVES01,
+							ImageConfig.ROLE_WEREWOLVES02,
+							ImageConfig.ROLE_WEREWOLVES03,
+							ImageConfig.ROLE_WEREWOLVES04},
+					{
+							ImageConfig.ROLE_ZOMBIE01,
+							ImageConfig.ROLE_ZOMBIE02,
+							ImageConfig.ROLE_ZOMBIE03,
+							ImageConfig.ROLE_ZOMBIE04,}};
+	public static final int[][] BARRIER_SCRIPT=
 			{
-				{ImageConfig.BUTTON_START02,ImageConfig.BUTTON_START02},
-				{ImageConfig.BUTTON_TEAM02,ImageConfig.BUTTON_TEAM02},
-				{ImageConfig.BUTTON_EXIT02,ImageConfig.BUTTON_EXIT02},
-				{ImageConfig.BUTTON_MUSIC02,ImageConfig.BUTTON_MUSIC02},
+				{RoleSprite.TYPE_VAMPIRE,RoleSprite.TYPE_VAMPIRE,RoleSprite.TYPE_VAMPIRE},
+				{RoleSprite.TYPE_ZOMBIE,RoleSprite.TYPE_ZOMBIE,RoleSprite.TYPE_ZOMBIE},
+				{RoleSprite.TYPE_WEREWOLVES,RoleSprite.TYPE_WEREWOLVES,RoleSprite.TYPE_WEREWOLVES},
+				{RoleSprite.TYPE_VAMPIRE,RoleSprite.TYPE_WEREWOLVES,RoleSprite.TYPE_ZOMBIE},
 			};
+	public static final int[] ITEM_SCRIPT=
+			{
+				ImageConfig.ITEM_BULLET,
+				ImageConfig.ITEM_CROSS,
+				ImageConfig.ITEM_SYRINGE,
+			};
+	public static final int[] BARRIER_MOVE_SCRIPT=
+			{// PICK距離 ,PICK移動速度 ,角色出現距離,角色移動速度
+			 // PICK圖檔 x,y
+				70,30,1000,150,-7,-28
+			};
+	public static final int[][] PICK_POSITION=
+			{
+				{913,28},
+				{913,228},
+				{913,428},
+			};
+	public static final int[] PICK_COLLISION=
+			{
+				0,0,188,166
+			};
+	public static final int[][] BARRIER_ROLE_POSITION=
+			{
+				{0,40},
+				{560,40},
+				{280,40},
+			};
+	public static final int[][] BARRIR_BUTTON_POSITION =
+		{
+			{ButtonSprite.TYPE_TRIANGLE_LEFT,168,630},
+			{ButtonSprite.TYPE_TRIANGLE_RIGHT,649,630},
+			{ButtonSprite.TYPE_START_B,915,609},
+			{ButtonSprite.TYPE_BACK,1128,4}};
+	public static final int[][] BUTTON_PUSH_SCRIPT =
+		{
+			{ImageConfig.BUTTON_START02,ImageConfig.BUTTON_START02},
+			{ImageConfig.BUTTON_TEAM02,ImageConfig.BUTTON_TEAM02},
+			{ImageConfig.BUTTON_EXIT02,ImageConfig.BUTTON_EXIT02},
+			{ImageConfig.BUTTON_MUSIC02,ImageConfig.BUTTON_MUSIC02},
+			{ImageConfig.BUTTON_TRIANGLE_LEFT02,ImageConfig.BUTTON_TRIANGLE_LEFT02},
+			{ImageConfig.BUTTON_TRIANGLE_RIGHT02,ImageConfig.BUTTON_TRIANGLE_RIGHT02},
+			{ImageConfig.BUTTON_START_B02,ImageConfig.BUTTON_START_B02},
+			{ImageConfig.BUTTON_BACK02,ImageConfig.BUTTON_BACK03}};
+	// public static final int[][] BARRIER_SET =
+	// {
+	// {0,MonsterSprite.TYPE_WEREWOLVES,0},
+	// {0,MonsterSprite.TYPE_WEREWOLVES,1},
+	// {0,MonsterSprite.TYPE_WEREWOLVES,2},
+	// {8,MonsterSprite.TYPE_ZOMBIE,0},
+	// {8,MonsterSprite.TYPE_ZOMBIE,1},
+	// {8,MonsterSprite.TYPE_ZOMBIE,2},
+	// {13,MonsterSprite.TYPE_VAMPIRE,0},
+	// {13,MonsterSprite.TYPE_VAMPIRE,1},
+	// {13,MonsterSprite.TYPE_VAMPIRE,2},
+	// {48,MonsterSprite.TYPE_VAMPIRE,0},
+	// };
+	public static final int[] BOMB_POSITION =
+		{174,56,39};
 	public static final int[][] BARRIER_SET =
 		{
-			{0,MonsterSprite.TYPE_WEREWOLVES,0},
-			{0,MonsterSprite.TYPE_WEREWOLVES,1},
-			{0,MonsterSprite.TYPE_WEREWOLVES,2},
-			{8,MonsterSprite.TYPE_ZOMBIE,0},
-			{8,MonsterSprite.TYPE_ZOMBIE,1},
-			{8,MonsterSprite.TYPE_ZOMBIE,2},
-			{13,MonsterSprite.TYPE_VAMPIRE,0},
-			{13,MonsterSprite.TYPE_VAMPIRE,1},
-			{13,MonsterSprite.TYPE_VAMPIRE,2},
-			{48,MonsterSprite.TYPE_VAMPIRE,0},
-		};
-	public static final int[] BOMB_POSITION=
-			{174,56,39};
-	// public static final int[][] BARRIER_SET=
-	// {
-	// {3,MonsterSprite.TYPE_ZOMBIE,0},
-	// {8,MonsterSprite.TYPE_ZOMBIE,1},
-	// {13,MonsterSprite.TYPE_ZOMBIE,2},
-	// {18,MonsterSprite.TYPE_ZOMBIE,0},
-	// {23,MonsterSprite.TYPE_ZOMBIE,1},
-	// {28,MonsterSprite.TYPE_ZOMBIE,2},
-	// {33,MonsterSprite.TYPE_ZOMBIE,0},
-	// {38,MonsterSprite.TYPE_ZOMBIE,1},
-	// {43,MonsterSprite.TYPE_ZOMBIE,2},
-	// {48,MonsterSprite.TYPE_ZOMBIE,0},
-	// };
+			{0,MonsterSprite.TYPE_ZOMBIE,1},
+			{3,MonsterSprite.TYPE_ZOMBIE,1},
+			{6,MonsterSprite.TYPE_ZOMBIE,1},
+			{9,MonsterSprite.TYPE_ZOMBIE,1},
+			{12,MonsterSprite.TYPE_ZOMBIE,1},
+			{15,MonsterSprite.TYPE_ZOMBIE,1},
+			{17,MonsterSprite.TYPE_ZOMBIE,1},
+			{19,MonsterSprite.TYPE_ZOMBIE,1},
+			{21,MonsterSprite.TYPE_ZOMBIE,1},
+			{23,MonsterSprite.TYPE_ZOMBIE,1},
+			{25,MonsterSprite.TYPE_ZOMBIE,1},
+			{27,MonsterSprite.TYPE_ZOMBIE,1},
+			{28,MonsterSprite.TYPE_ZOMBIE,1},
+			{30,MonsterSprite.TYPE_ZOMBIE,1},
+			{33,MonsterSprite.TYPE_ZOMBIE,1},
+			{36,MonsterSprite.TYPE_ZOMBIE,1},
+			{39,MonsterSprite.TYPE_ZOMBIE,1},
+			{42,MonsterSprite.TYPE_ZOMBIE,1},
+			{45,MonsterSprite.TYPE_ZOMBIE,1},
+			{48,MonsterSprite.TYPE_ZOMBIE,1},
+			{51,MonsterSprite.TYPE_ZOMBIE,1},
+			{52,MonsterSprite.TYPE_ZOMBIE,1},
+			{53,MonsterSprite.TYPE_ZOMBIE,1},
+			{54,MonsterSprite.TYPE_ZOMBIE,1},
+			{55,MonsterSprite.TYPE_ZOMBIE,1},
+			{56,MonsterSprite.TYPE_ZOMBIE,1},
+			{57,MonsterSprite.TYPE_ZOMBIE,1},
+			{58,MonsterSprite.TYPE_ZOMBIE,1},
+			{59,MonsterSprite.TYPE_ZOMBIE,1},};
 	public static final int[] GOLD_POSITION =
 		{308,65};
 	public static final int[] STAGE_POSITION =
@@ -109,6 +221,12 @@ public class GameConsts
 		{87,60};
 	public static final int[] BUTTON_COLLISION =
 		{87,60,168,108};
+	public static final int[][] MENU_COLLISION=
+			{
+				{30,72,222,168},
+				{226,72,415,168},
+				{419,72,608,168},
+			};
 	public static final int[] MENU_PAUSE_SCRIPT =
 		{
 				ImageConfig.MENU_PAUSE01,
@@ -124,16 +242,24 @@ public class GameConsts
 				ImageConfig.UI_BAR05,
 				ImageConfig.UI_BAR06,
 				ImageConfig.UI_BAR07,};
+	public static final int[] BURST_COLLISION=
+			{
+				97,161,274,330
+			};
 	public static final int[] BURST_POSITION =
-		{-112,-40};
+		{-150,-40};
 	public static final int[] BURST_SCRIPT =
 		{
 				ImageConfig.BURST01,
 				ImageConfig.BURST02,
 				ImageConfig.BURST03,
+				};
+	public static final int[] BURST_END_SCRIPT=
+			{
 				ImageConfig.BURST04,
 				ImageConfig.BURST05,
-				ImageConfig.BURST06,};
+				ImageConfig.BURST06,
+			};
 	public static final int[] BACKGROUND_POSITION =
 		{0,0};
 	public static final int[] CITYWALL_POSITION =
@@ -143,6 +269,23 @@ public class GameConsts
 	public static final int[] BAR_HP_POSITION =
 		{// x,y,width,height,size
 		915,68,261,32,5};
+	public static final int[][] SELECT_POSITION=
+			{
+				{94,62},
+				{84,168},
+				{174,213},
+			};
+	public static final int[] SELECT_COLLISION=
+			{15,11,106,106};
+	public static final int[][] SELECT_TYPE_POSITION=
+			{
+				{ImageConfig.SELECT_ARROW,33,14},
+				{ImageConfig.SELECT_BULLET,33,14},
+				{ImageConfig.SELECT_CROSS,33,14},
+				{ImageConfig.SELECT_SYRINGE,33,14},
+				{ImageConfig.SELECT_BOMB,33,14},
+				{ImageConfig.SELECT_BOOM,19,37},
+			};
 	public static final int[] CITYWALL_STAY_SCRIPT =
 		{
 				ImageConfig.CITY_WALL_STAY01,
@@ -161,6 +304,29 @@ public class GameConsts
 				ImageConfig.CITY_WALL_DESTROY03,
 				ImageConfig.CITY_WALL_DESTROY04,
 				ImageConfig.CITY_WALL_DESTROY05,};
+	public static final int[][] DOOR_DIS_POSITION=
+			{
+				{201,-24},//UP
+				{72,46},//MID_UP
+				{-25,128},//MID
+				{59,168},//MID_DOWN
+				{181,143}//DOWN
+			};
+	public static final int[] DOOR_MID_SCRIPT=
+			{
+				ImageConfig.DOOR_MID01,
+				ImageConfig.DOOR_MID01,
+			};
+	public static final int[] DOOR_UP_SCRIPT=
+			{
+				ImageConfig.DOOR_UP01,
+				ImageConfig.DOOR_UP01,
+			};
+	public static final int[] DOOR_DOWN_SCRIPT=
+			{
+				ImageConfig.DOOR_DOWN01,
+				ImageConfig.DOOR_DOWN01,
+			};
 	public static final int[] WALL_LONG_SCRIPT =
 		{
 				ImageConfig.WALL_LONG01,
@@ -232,15 +398,9 @@ public class GameConsts
 			{ImageConfig.HERO_SHOOT02,1,56,124},};
 	public static final int[] HERO_TOSS_SCRIPT =
 		{
-				ImageConfig.HERO_STONE01,
-				//ImageConfig.HERO_STONE01,
-				//ImageConfig.HERO_STONE01,
-				//ImageConfig.HERO_STONE01,
-				ImageConfig.HERO_STONE02,
-				//ImageConfig.HERO_STONE02,
-				//ImageConfig.HERO_STONE03,
-				ImageConfig.HERO_STONE03,
-				};
+				ImageConfig.HERO_BOMB01,
+				ImageConfig.HERO_BOMB02,
+				ImageConfig.HERO_BOMB03,};
 	public static final int[] HERO_COLLISION =
 		{95,103,312,245};
 	public static final int[][] HERO_BOOM_SCRIPT =

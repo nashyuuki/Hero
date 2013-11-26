@@ -9,6 +9,7 @@ import com.example.herodefender.GameConsts;
 import com.example.herodefender.config.ImageConfig;
 import com.example.herodefender.config.ModelConfig;
 import com.example.herodefender.config.MusicConfig;
+import com.example.herodefender.sprite.Item;
 
 public class GameBean extends Application
 {
@@ -19,6 +20,7 @@ public class GameBean extends Application
 	private GameConsts gameConsts;
 	private int state = ModelConfig.INIT;
 	private int nextState;
+	private int[] items={Item.CROSS,Item.CROSS,Item.CROSS};
 
 	public GameBean()
 	{
@@ -93,4 +95,15 @@ public class GameBean extends Application
 	{
 		 ((Activity) context).finish();
 	}
+
+	public int[] getItems()
+	{
+		return items;
+	}
+
+	public void setItems(int[] items)
+	{
+		this.items = items;
+	}
+	
 }

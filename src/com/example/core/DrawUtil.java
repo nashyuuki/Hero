@@ -6,11 +6,14 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+
 import com.example.herodefender.Consts;
 
 public class DrawUtil
 {
+	
 	public static void drawRect(Canvas canvas, int x, int y, int width, int height, int a, int r, int g, int b)
 	{
 		Paint paint = new Paint();
@@ -33,7 +36,22 @@ public class DrawUtil
 		}
 		canvas.restore();
 	}
-
+	public static void drawRoundRect(Canvas canvas,int x1,int y1,int x2,int y2,int a, int r, int g, int b,int strokeWidth)
+	{
+		Paint paint = new Paint();
+		paint.setARGB(a, r, b, g);
+		float dstrokeWidth=strokeWidth * Consts.coordScale ;
+		paint.setStrokeWidth(dstrokeWidth);
+	    paint.setStyle(Style.STROKE);
+	    int dx1=(int) (x1 * Consts.coordScale);
+	    int dy1=(int) (y1 * Consts.coordScale);
+	    int dx2=(int) (x2 * Consts.coordScale);
+	    int dy2=(int) (y2 * Consts.coordScale);
+		RectF rect = new RectF(dx1,dy1,dx2,dy2);
+		canvas.save();
+		canvas.drawRoundRect(rect, 20, 20, paint);
+		canvas.restore();
+	}
 	public static void drawStrokeRect(Canvas canvas, int x, int y, int width, int height, int a, int r, int g, int b, int strokeWidth)
 	{
 		Paint paint = new Paint();
@@ -64,7 +82,20 @@ public class DrawUtil
 		canvas.restore();
 
 	}
-
+	public static void drawTile(Canvas canvas, Drawable drawable, int x, int y,int w,int h)
+	{//w 圖片橫的個數,h 圖片直的個數
+		int dx = (int) (x * Consts.coordScale);
+		int dy = (int) (y * Consts.coordScale);
+		int width = drawable.getIntrinsicWidth();
+		int height = drawable.getIntrinsicHeight();
+		for(int i=0;i<w;i++)
+		{
+			for(int j=0;j<h;j++)
+			{
+				drawOriginalImage(canvas, drawable, dx+i*width, dy+j*height, width, height);
+			}
+		}
+	}
 	public static void drawImage(Canvas canvas, Drawable drawable, int x, int y)
 	{
 		int width = drawable.getIntrinsicWidth();
@@ -99,7 +130,16 @@ public class DrawUtil
 		int height = (int) (drawable.getIntrinsicHeight() * scaleY);
 		drawImage(canvas, drawable, x, y, width, height);
 	}
-
+	public static void drawOriginalImage(Canvas canvas, Drawable drawable, int x, int y, int width, int height)
+	{//用在使用長寬被縮小的圖檔
+		canvas.save();
+		drawable.setBounds(x, y, x + width, y + height);
+		if (setWindowClip(canvas, x, y, width, height))
+		{
+			drawable.draw(canvas);
+		}
+		canvas.restore();
+	}
 	public static void drawImage(Canvas canvas, Drawable drawable, int x, int y, int width, int height)
 	{
 		canvas.save();

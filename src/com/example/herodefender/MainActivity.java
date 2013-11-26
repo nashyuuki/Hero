@@ -14,6 +14,7 @@ public class MainActivity extends Activity
 {
 	private CoreController core;
 	private GameBean gameBean;
+	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -27,23 +28,27 @@ public class MainActivity extends Activity
 		core = new CoreController(gameBean);
 		setContentView(core);
 	}
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	@Override
 	protected void onPause()
 	{
 		Log.v("TEST", "onPause");
 		core.pause();
 		super.onPause();
 	}
+	@Override
 	protected void onDestroy()
 	{
 		Log.v("TEST", "onDestroy");
 		gameBean.getImageConfig().resetDrawables();
 		super.onDestroy();
 	}
+	@Override
 	protected void onResume()
 	{
 		Log.v("TEST", "onResume");

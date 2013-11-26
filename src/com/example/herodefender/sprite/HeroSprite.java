@@ -138,8 +138,8 @@ public class HeroSprite extends Sprite
 		}
 		else if (state == TOSS_END)
 		{
-			this.drawAir(canvas, ImageConfig.HERO_STONE04);
-			this.drawImage(canvas, ImageConfig.HERO_STONE04, x, y);
+			this.drawAir(canvas, ImageConfig.HERO_BOMB04);
+			this.drawImage(canvas, ImageConfig.HERO_BOMB04, x, y);
 		}
 		else if (state == BOOM)
 		{
@@ -253,7 +253,17 @@ public class HeroSprite extends Sprite
 	{
 		this.weaponType = weaponType;
 	}
-
+	public boolean isWork()
+	{
+		if(state==STAY||state==ARROW||state==SHOOT)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	public boolean isToss()
 	{
 		return toss;

@@ -4,11 +4,13 @@ import java.util.Random;
 import java.util.Vector;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
 import com.example.core.CoreModel;
 import com.example.core.GameBean;
+import com.example.herodefender.config.ModelConfig;
 import com.example.herodefender.sprite.AirSprite;
 import com.example.herodefender.sprite.ArrowSprite;
 import com.example.herodefender.sprite.BackgroundSprite;
@@ -16,7 +18,9 @@ import com.example.herodefender.sprite.BurstSprite;
 import com.example.herodefender.sprite.CitywallSprite;
 import com.example.herodefender.sprite.DoorSprite;
 import com.example.herodefender.sprite.HeroSprite;
+import com.example.herodefender.sprite.Item;
 import com.example.herodefender.sprite.MonsterSprite;
+import com.example.herodefender.sprite.SelectSprite;
 import com.example.herodefender.sprite.Sprite;
 import com.example.herodefender.sprite.UiSprite;
 import com.example.herodefender.sprite.VampireSprite;
@@ -35,6 +39,9 @@ public class GameModel extends CoreModel
 	private static final int ATTACK_NONE = 0;
 	private static final int ATTACK_SHOOT = 1;
 	private static final int ATTACK_STONE = 2;
+	private static final int WOUND_BIG=0;
+	private static final int WOUND_MID=1;
+	private static final int WOUND_NON=2;
 	private int scriptInt;
 	private int[][] barrierSet;
 	private BackgroundSprite backgroundSprite;
@@ -47,9 +54,12 @@ public class GameModel extends CoreModel
 	private SparseArray<ArrowSprite> bats;
 	private SparseArray<BurstSprite> bursts;
 	private HeroSprite[] heros;
+	private SelectSprite[][] selects;
 	private Random random;
 	private UiSprite barSprite;
 	private UiSprite menuSprite;
+	private int[] items;
+	public int perState;
 
 	public GameModel(GameBean gameBean)
 	{
@@ -86,14 +96,24 @@ public class GameModel extends CoreModel
 		bats = new SparseArray<ArrowSprite>();
 		bursts = new SparseArray<BurstSprite>();
 		heros = new HeroSprite[GameConsts.HERO_POSITION.length];
+		selects=new SelectSprite[heros.length][GameConsts.SELECT_POSITION.length];
 		for (int i = 0; i < heros.length; i++)
 		{
+			int[] heroPosition=GameConsts.HERO_POSITION[i];
 			heros[i] = new HeroSprite(this.getImageConfig());
-			heros[i].setPosition(GameConsts.HERO_POSITION[i]);
+			heros[i].setPosition(heroPosition);
 			heros[i].setCollisionArea(GameConsts.HERO_COLLISION);
 			heros[i].setMaxMp(GameConsts.HERO_MP);
-			heros[i].setWeaponType(i + 1);
+			heros[i].setWeaponType(0);
 			heros[i].setState(HeroSprite.STAY);
+			for(int j=0;j<selects[i].length;j++)
+			{
+				selects[i][j]=new SelectSprite(this.getImageConfig());
+				selects[i][j].setPosition(
+				                          heroPosition[0]+GameConsts.SELECT_POSITION[j][0],
+				                          heroPosition[1]+GameConsts.SELECT_POSITION[j][1]);
+				selects[i][j].setCollisionArea(GameConsts.SELECT_COLLISION);
+			}
 		}
 		barrierSet = GameConsts.BARRIER_SET;
 		random = new Random();
@@ -106,6 +126,7 @@ public class GameModel extends CoreModel
 		barSprite.setMaxTime(GameConsts.BARRIER_SET);
 		menuSprite = new UiSprite(this.getImageConfig());
 		menuSprite.setPosition(GameConsts.MENU_PAUSE_POSITION);
+		items=gameBean.getItems();
 	}
 
 	private void addAirSprite(MonsterSprite monsterSprite, int layer)
@@ -190,6 +211,7 @@ public class GameModel extends CoreModel
 		int y = heroSprite.getY() + GameConsts.BURST_POSITION[1];
 		burstSprite.setX(x);
 		burstSprite.setY(y);
+		burstSprite.setCollisionArea(GameConsts.BURST_COLLISION);
 		burstSprite.setState(BurstSprite.BURST);
 		int no = getHashNo(bursts);
 		bursts.put(no, burstSprite);
@@ -241,11 +263,17 @@ public class GameModel extends CoreModel
 				if (monsterSprite.isCollision(arrowSprite)
 						&& this.isZombieHit(arrowSprite, monsterSprite))
 				{
-					if (this.isWounded(arrowSprite, monsterSprite))
+					int woundType=this.isWounded(arrowSprite, monsterSprite);
+					if (woundType==WOUND_BIG)
 					{
-						attack = attack * GameConsts.WOUND_MULTIPLE;
+						attack = attack * GameConsts.WOUND_BIG_MULTIPLE;
 						monsterSprite.setState(MonsterSprite.WOUNDED);
 						arrowSprite.setState(ArrowSprite.HIT);
+					}
+					else if(woundType==WOUND_MID)
+					{
+						attack = attack * GameConsts.WOUND_MID_MULTIPLE;
+						arrowSprite.setState(Sprite.DISABLE);
 					}
 					else
 					{
@@ -289,7 +317,7 @@ public class GameModel extends CoreModel
 		return true;
 	}
 
-	private boolean isWounded(ArrowSprite arrowSprite, MonsterSprite monsterSprite)
+	private int isWounded(ArrowSprite arrowSprite, MonsterSprite monsterSprite)
 	{
 		int arrowType = arrowSprite.getType();
 		int monsterType = monsterSprite.getType();
@@ -297,31 +325,47 @@ public class GameModel extends CoreModel
 		{
 			if (monsterType == MonsterSprite.TYPE_HERO)
 			{
-				return true;
+				return WOUND_BIG;
+			}
+			else
+			{
+				return WOUND_MID;
 			}
 		}
 		else if (arrowType == ArrowSprite.TYPE_BULLET)
 		{
 			if (monsterType == MonsterSprite.TYPE_WEREWOLVES)
 			{
-				return true;
+				return WOUND_BIG;
+			}
+			else
+			{
+				return WOUND_NON;
 			}
 		}
 		else if (arrowType == ArrowSprite.TYPE_CROSS)
 		{
 			if (monsterType == MonsterSprite.TYPE_VAMPIRE)
 			{
-				return true;
+				return WOUND_BIG;
+			}
+			else
+			{
+				return WOUND_NON;
 			}
 		}
 		else if (arrowType == ArrowSprite.TYPE_SYRING)
 		{
 			if (monsterType == MonsterSprite.TYPE_ZOMBIE)
 			{
-				return true;
+				return WOUND_BIG;
+			}
+			else
+			{
+				return WOUND_NON;
 			}
 		}
-		return false;
+		return WOUND_NON;
 	}
 
 	private boolean isCollisionDoor(ArrowSprite arrowSprite)
@@ -339,8 +383,6 @@ public class GameModel extends CoreModel
 		}
 		return false;
 	}
-
-	@Override
 	public void updateView(long viewTime)
 	{
 		if (subState == PLAY)
@@ -370,6 +412,7 @@ public class GameModel extends CoreModel
 						{
 							mp = GameConsts.HERO_MP;
 							heroSprite.setAir(true);
+							selects[heroInt][SelectSprite.INT_BOOM].setState(SelectSprite.STAY);
 						}
 						heroSprite.setMp(mp);
 						heroSprite.setMp(true);
@@ -817,32 +860,13 @@ public class GameModel extends CoreModel
 			MonsterSprite monsterSprite = monsters.get(key);
 			if (monsterSprite.getLayer() == layer)
 			{
-				if (monsterSprite.getState() == MonsterSprite.ATTACK
-						|| monsterSprite.getState() == MonsterSprite.MOVE)
+				if (monsterSprite.isLive())
 				{
 					monsterSprite.setState(MonsterSprite.DEAD);
 				}
 			}
 		}
 	}
-
-	public void stoneCollisionMonster(int layer)
-	{
-		for (int i = 0; i < monsters.size(); i++)
-		{
-			int key = monsters.keyAt(i);
-			MonsterSprite monsterSprite = monsters.get(key);
-			if (monsterSprite.getLayer() == layer)
-			{
-				if (monsterSprite.isLiveAttack())
-				{
-					monsterSprite.setState(MonsterSprite.HURT_STONE);
-				}
-			}
-		}
-	}
-
-	@Override
 	public void update()
 	{
 		if (subState == START)
@@ -850,6 +874,41 @@ public class GameModel extends CoreModel
 			barSprite.update();
 			if (barSprite.getState() == UiSprite.BAR_STAY)
 			{
+				for(int i=0;i<selects.length;i++)
+				{
+					for(int j=0;j<selects[i].length;j++)
+					{
+						if(j==SelectSprite.INT_BOOM)
+						{
+							selects[i][j].setType(SelectSprite.TYPE_BOOM);
+							selects[i][j].setState(SelectSprite.STOP);
+						}
+						else if(j==SelectSprite.INT_BOMB)
+						{
+							selects[i][j].setType(SelectSprite.TYPE_BOMB);
+							selects[i][j].setState(SelectSprite.STAY);
+						}
+						else if(j==SelectSprite.INT_WEAPON)
+						{
+							if(items[i]==Item.BULLET)
+							{
+								selects[i][j].setType(SelectSprite.TYPE_BULLET);
+							}
+							else if(items[i]==Item.CROSS)
+							{
+								selects[i][j].setType(SelectSprite.TYPE_CROSS);
+							}
+							else if(items[i]==Item.SYRINGE)
+							{
+								selects[i][j].setType(SelectSprite.TYPE_SYRINGE);
+							}
+							if(items[i]!=Item.NONE)
+							{
+								selects[i][j].setState(SelectSprite.STAY);
+							}
+						}
+					}
+				}
 				subState = PLAY;
 			}
 		}
@@ -859,6 +918,78 @@ public class GameModel extends CoreModel
 		}
 		if (subState == PLAY)
 		{
+			for(int i=0;i<selects.length;i++)
+			{
+				for(int j=0;j<selects[i].length;j++)
+				{
+					SelectSprite selectSprite=selects[i][j];
+					if(selectSprite.getState()==SelectSprite.SELECT_END)
+					{
+						if(j==SelectSprite.INT_BOOM)
+						{
+							selectSprite.setState(SelectSprite.STOP);
+							heros[i].setState(HeroSprite.BOOM);
+							heros[i].setAir(false);
+							heros[i].setMp(0);
+						}
+						else if(j==SelectSprite.INT_BOMB)
+						{
+							int bombInt=barSprite.getBombInt();
+							heros[i].setState(HeroSprite.TOSS);
+							if(bombInt>0)
+							{
+								selectSprite.setState(SelectSprite.STAY);
+							}
+							else
+							{
+								for(int k=0;k<selects.length;k++)
+								{
+									selects[k][SelectSprite.INT_BOMB].setState(SelectSprite.DISABLE);
+								}
+							}
+						}
+						else if(j==SelectSprite.INT_WEAPON)
+						{
+							int type=selectSprite.getType();
+							int weaponType = heros[i].getWeaponType();
+							if(weaponType==ArrowSprite.TYPE_ARROW)
+							{
+								selectSprite.setType(SelectSprite.TYPE_ARROW);
+							}
+							else if(weaponType==ArrowSprite.TYPE_CROSS)
+							{
+								selectSprite.setType(SelectSprite.TYPE_CROSS);
+							}
+							else if(weaponType==ArrowSprite.TYPE_BULLET)
+							{
+								selectSprite.setType(SelectSprite.TYPE_BULLET);
+							}
+							else if(weaponType==ArrowSprite.TYPE_SYRING)
+							{
+								selectSprite.setType(SelectSprite.TYPE_SYRINGE);
+							}
+							if(type==SelectSprite.TYPE_ARROW)
+							{
+								heros[i].setWeaponType(ArrowSprite.TYPE_ARROW);
+							}
+							else if(type==SelectSprite.TYPE_CROSS)
+							{
+								heros[i].setWeaponType(ArrowSprite.TYPE_CROSS);
+							}
+							else if(type==SelectSprite.TYPE_BULLET)
+							{
+								heros[i].setWeaponType(ArrowSprite.TYPE_BULLET);
+							}
+							else if(type==SelectSprite.TYPE_SYRINGE)
+							{
+								heros[i].setWeaponType(ArrowSprite.TYPE_SYRING);
+							}
+							selectSprite.setState(SelectSprite.STAY);
+						}
+					}
+					selects[i][j].update();
+				}
+			}
 			for (int i = 0; i < airs.size(); i++)
 			{
 				int key = airs.keyAt(i);
@@ -1040,7 +1171,6 @@ public class GameModel extends CoreModel
 				else if (heroSprite.getState() == HeroSprite.TOSS_END)
 				{
 					this.addBurstSprite(heroSprite);
-					this.stoneCollisionMonster(i);
 				}
 				else if (heroSprite.getState() == HeroSprite.BOOM_END)
 				{
@@ -1082,6 +1212,22 @@ public class GameModel extends CoreModel
 				{
 					bursts.remove(key);
 				}
+				else if(burstSprite.getState() == BurstSprite.BURST_END)
+				{
+					for (int j = 0; j < monsters.size(); j++)
+					{
+						int keyj = monsters.keyAt(j);
+						MonsterSprite monsterSprite = monsters.get(keyj);
+						
+						if (monsterSprite.isLive()&&
+							monsterSprite.getState()!=MonsterSprite.HURT_STONE&&
+							burstSprite.isCollision(monsterSprite)
+							)
+						{
+							monsterSprite.setState(MonsterSprite.HURT_STONE);
+						}
+					}
+				}
 			}
 			barSprite.update();
 			int time = barSprite.getTime();
@@ -1092,7 +1238,7 @@ public class GameModel extends CoreModel
 				{
 					scriptInt++;
 					this.addMonsterSprite(script[2], script[1]);
-					if (this.isHasScript(barrierSet, time))
+					if (this.isHasScript(barrierSet, scriptInt))
 					{
 						script = barrierSet[scriptInt];
 					}
@@ -1110,6 +1256,7 @@ public class GameModel extends CoreModel
 					{
 						heros[i].setState(HeroSprite.WIN);
 					}
+					disableSelect();
 					subState = WIN;
 				}
 			}
@@ -1119,6 +1266,7 @@ public class GameModel extends CoreModel
 			citywallSprite.update();
 			if (citywallSprite.getState() == CitywallSprite.DESTROY_END)
 			{
+				disableSelect();
 				subState = FAILURE;
 				for (int i = 0; i < heros.length; i++)
 				{
@@ -1135,7 +1283,16 @@ public class GameModel extends CoreModel
 			this.updateSprite(heros);
 		}
 	}
-
+	private void disableSelect()
+	{
+		for(int i=0;i<selects.length;i++)
+		{
+			for(int j=0;j<selects[i].length;j++)
+			{
+				selects[i][j].setState(SelectSprite.DISABLE);
+			}
+		}
+	}
 	private boolean isHasScript(int[][] script, int scriptInt)
 	{
 		if (scriptInt < script.length)
@@ -1308,6 +1465,13 @@ public class GameModel extends CoreModel
 			this.drawSprite(canvas, airs, 1);
 			this.drawSprite(canvas, arrows);
 			barSprite.drawView(canvas);
+			for(int i=0;i<selects.length;i++)
+			{
+				for(int j=0;j<selects[i].length;j++)
+				{
+					selects[i][j].drawView(canvas);
+				}
+			}
 			menuSprite.drawView(canvas);
 		}
 	}
@@ -1386,57 +1550,41 @@ public class GameModel extends CoreModel
 		{
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 			{
-				for (int i = 0; i < heros.length; i++)
+				for(int i=0;i<selects.length;i++)
 				{
-					HeroSprite heroSprite = heros[i];
-					if (heroSprite.isAir())
+					for(int j=0;j<selects[i].length;j++)
 					{
-						if (heroSprite.getState() == HeroSprite.ARROW
-								|| heroSprite.getState() == HeroSprite.STAY
-								|| heroSprite.getState() == HeroSprite.SHOOT)
+						SelectSprite selectSprite=selects[i][j];
+						if(selectSprite.getState()==SelectSprite.STAY&&
+						   selectSprite.isCollision(x, y))
 						{
-							if (heroSprite.isCollision(x, y))
+							if(j==SelectSprite.INT_BOOM)
 							{
-								heroSprite.setState(HeroSprite.BOOM);
-								heroSprite.setAir(false);
-								heroSprite.setMp(0);
-							}
-						}
-					}
-				}
-				int bombInt=barSprite.getBombInt();
-				if(bombInt>0)
-				{
-					for (int i = 0; i < monsters.size(); i++)
-					{
-						int key = monsters.keyAt(i);
-						MonsterSprite monsterSprite = monsters.get(key);
-						if (monsterSprite.isLiveAttack())
-						{
-							if (monsterSprite.isCollision(x, y))
-							{
-								int layer = monsterSprite.getLayer();
-								HeroSprite heroSprite = heros[layer];
-								if (heroSprite.getState() == HeroSprite.ARROW
-										|| heroSprite.getState() == HeroSprite.STAY
-										|| heroSprite.getState() == HeroSprite.SHOOT)
+								if(heros[i].isWork()&&
+								   !selects[i][SelectSprite.INT_BOMB].isSelect())
 								{
+									selectSprite.setState(SelectSprite.SELECT);
+								}
+							}
+							else if(j==SelectSprite.INT_BOMB)
+							{	
+								if(heros[i].isWork()&&
+								   !selects[i][SelectSprite.INT_BOOM].isSelect())
+								{
+									int bombInt=barSprite.getBombInt();
+									if(bombInt>0)
+									{
+										selectSprite.setState(SelectSprite.SELECT);
+									}
 									bombInt--;
 									barSprite.setBombInt(bombInt);
-									heroSprite.setState(HeroSprite.TOSS);
 								}
-								break;
+							}
+							else
+							{
+								selectSprite.setState(SelectSprite.SELECT);
 							}
 						}
-					}
-				}
-				if (barSprite.isCollision(x, y))
-				{
-					if (!barSprite.isPause())
-					{
-						barSprite.setPause(true);
-						menuSprite.setState(UiSprite.MENU_PAUSE);
-						subState = PAUSE;
 					}
 				}
 			}
@@ -1470,20 +1618,63 @@ public class GameModel extends CoreModel
 				}
 			}
 		}
+		if(subState == PLAY||subState==START||
+		   subState== DESTROY ||subState== FAILURE ||
+		   subState == WIN)
+		{
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+			{
+				if (barSprite.isCollision(x, y))
+				{
+					this.menuPause();
+				}
+			}
+		}
 		else if (subState == PAUSE)
 		{
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 			{
 				if (barSprite.isCollision(x, y))
 				{
-					if (barSprite.isPause())
-					{
-						barSprite.setPause(false);
-						menuSprite.setState(Sprite.DISABLE);
-						subState = PLAY;
-					}
+					menuContinue();
+				}
+				else if(menuSprite.isCollisionMenu(UiSprite.MENU_LOBBY, x, y))
+				{
+					this.setNextState(ModelConfig.LOBBY);
+				}
+				else if(menuSprite.isCollisionMenu(UiSprite.MENU_RESTART, x, y))
+				{
+					this.setNextState(ModelConfig.RESTART);
+				}
+				else if(menuSprite.isCollisionMenu(UiSprite.MENU_CONTINUE, x, y))
+				{
+					menuContinue();
 				}
 			}
 		}
+	}
+	
+	private void menuPause()
+	{
+		if (!barSprite.isPause())
+		{
+			barSprite.setPause(true);
+			menuSprite.setState(UiSprite.MENU_PAUSE);
+			perState = subState;
+			subState = PAUSE;
+		}
+	}
+	private void menuContinue()
+	{
+		if (barSprite.isPause())
+		{
+			barSprite.setPause(false);
+			menuSprite.setState(Sprite.DISABLE);
+			subState = perState;
+		}
+	}
+	public void pause()
+	{
+		menuPause();
 	}
 }

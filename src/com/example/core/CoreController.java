@@ -18,6 +18,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	private Thread thread;
 	private Canvas canvas;
 	private boolean running;
+	private boolean change;
 	private ModelConfig modelConfig;
 	private ImageConfig imageConfig;
 	private MusicConfig musciConfig;
@@ -26,7 +27,6 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	private long lastUpdateTime;
 	private long viewUpdateTime;
 	private int timeUpdateSpeed = 200;
-
 	public CoreController(GameBean gameBean)
 	{
 		super(gameBean.getContext());
@@ -38,15 +38,14 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 		imageConfig = gameBean.getImageConfig();
 		musciConfig = gameBean.getMusciConfig();
 		running = false;
-
+		change=false;
 	}
-
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int arg1, int width, int height)
 	{
-		if (running)
+		Log.v("TEST", "surfaceChanged");
+		if (running&&!change)
 		{
-			Log.v("TEST", "surfaceChanged: width:" + width + " height:" + height);
+			Log.v("TEST", "width:" + width + " height:" + height);
 			Consts.screenWidth = width;
 			Consts.screenHeight = height;
 			Drawable image = imageConfig.getDrawable(ImageConfig.BACKGROUND_SIZE);
@@ -71,8 +70,10 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 			}
 			Consts.screenScale = scale;
 			Consts.coordScale = coord;
+			change=true;
 		}
 	}
+	@Override
 	public void surfaceCreated(SurfaceHolder holder)
 	{
 		Log.v(Consts.TAG, "surfaceCreated");
@@ -82,6 +83,8 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	public void pause()
 	{
 		Log.v(Consts.TAG, "pause");
+		CoreModel coreModel = modelConfig.getModel(gameBean.getState());
+		coreModel.pause();;
 		// 存資料
 		gameBean.storeGameBean();
 		if (running)
@@ -114,17 +117,19 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 			thread.start();
 		}
 	}
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder)
 	{
 		Log.v(Consts.TAG, "surfaceDestroyed");
+		change=false;
 		this.pause();
 	}
+	@Override
 	public void run()
 	{
 		while (running)
 		{
-
-			{
+			if(change){
 				CoreModel coreModel = null;
 				int state = gameBean.getState();
 				int nextState = gameBean.getNextState();
@@ -145,9 +150,23 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 					modelConfig.resetModels();
 					// 清除image資料
 					imageConfig.resetDrawables();
-					state = nextState;
+					if(nextState==ModelConfig.RESTART)
+					{
+						nextState=state;
+					}
+					else
+					{
+						state = nextState;
+					}
 					coreModel = modelConfig.getModel(state);
-					coreModel.init();
+					if(coreModel!=null)
+					{
+						coreModel.init();
+					}
+					else
+					{
+						break;
+					}
 				}
 				else
 				{
@@ -234,6 +253,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	{
 		return musciConfig;
 	}
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		Log.v(Consts.TAG, "onKeyDown keyCode" + keyCode + " KeyEvent" + event);

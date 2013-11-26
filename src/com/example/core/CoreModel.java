@@ -64,9 +64,13 @@ public abstract class CoreModel
 	{
 		// TestCoreActivity.getInstance().finish();
 	}
-
+	public void pause()
+	{
+		
+	}
 	public void restart()
 	{
 
 	}
+	
 }
