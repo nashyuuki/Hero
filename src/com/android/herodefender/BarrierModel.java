@@ -1,7 +1,6 @@
 package com.android.herodefender;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.android.core.CoreModel;
@@ -16,6 +15,7 @@ import com.android.herodefender.sprite.FrameSprite;
 import com.android.herodefender.sprite.Item;
 import com.android.herodefender.sprite.PickSprite;
 import com.android.herodefender.sprite.RoleSprite;
+import com.android.herodefender.sprite.Sprite;
 import com.android.herodefender.sprite.WordSprite;
 
 public class BarrierModel extends CoreModel
@@ -41,6 +41,7 @@ public class BarrierModel extends CoreModel
 	{
 		super(gameBean);
 	}
+	@Override
 	public void init()
 	{
 		this.loadImage(ImageConfig.BARRIER_LOAD);
@@ -97,6 +98,7 @@ public class BarrierModel extends CoreModel
 		effectSprite.setState(EffectSprite.MOVE);
 		talkSprite=new FrameSprite(gameBean);
 	}
+	@Override
 	public void updateView(long viewTime)
 	{
 		if(subState==BARRIER)
@@ -151,6 +153,7 @@ public class BarrierModel extends CoreModel
 		
 		talkSprite.setState(FrameSprite.START);
 	}
+	@Override
 	public void update()
 	{
 		if(subState==BARRIER)
@@ -227,7 +230,7 @@ public class BarrierModel extends CoreModel
 				{
 					roles[i].setPosition(GameConsts.BARRIER_ROLE_POSITION[i]);
 					roles[i].setType(nextRoles[i].getType());
-					nextRoles[i].setState(RoleSprite.DISABLE);
+					nextRoles[i].setState(Sprite.DISABLE);
 				}
 				this.setTalkSprite();
 				barrierSprite.setBarrierInt(barrierInt);
@@ -268,6 +271,7 @@ public class BarrierModel extends CoreModel
 			
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(subState==EFFECT||subState==BARRIER||subState==PUSH||subState==RIGHT||subState==LEFT)
@@ -308,12 +312,15 @@ public class BarrierModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void onKeyDown(int keyCode)
 	{
 	}
+	@Override
 	public void onKeyUp(int keyCode)
 	{	
 	}
+	@Override
 	public void onTouchEvent(int x, int y, MotionEvent event, int touchState)
 	{
 		if(subState==BARRIER)
@@ -343,7 +350,7 @@ public class BarrierModel extends CoreModel
 				{
 					if(talkSprite.getState()==FrameSprite.STAY)
 					{
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 					}
 				}
 			}
@@ -393,6 +400,7 @@ public class BarrierModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void onBackKeyDown()
 	{
 		for(int i=0;i<buttons.length;i++)

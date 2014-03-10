@@ -3,8 +3,6 @@ package com.android.herodefender;
 import com.android.herodefender.config.ImageConfig;
 import com.android.herodefender.sprite.ButtonSprite;
 import com.android.herodefender.sprite.FrameSprite;
-import com.android.herodefender.sprite.MonsterSprite;
-import com.android.herodefender.sprite.RoleSprite;
 import com.android.herodefender.sprite.WallSprite;
 import com.android.herodefender.sprite.WordSprite;
 

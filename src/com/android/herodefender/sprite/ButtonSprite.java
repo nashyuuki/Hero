@@ -21,6 +21,7 @@ public class ButtonSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if(state==PUSH)
@@ -31,6 +32,7 @@ public class ButtonSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==STAY)

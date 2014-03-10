@@ -30,6 +30,7 @@ public class HeroSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if (isMp)
@@ -113,6 +114,7 @@ public class HeroSprite extends Sprite
 		}
 		return false;
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == STAY)

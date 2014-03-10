@@ -10,6 +10,7 @@ import com.android.herodefender.sprite.BackgroundSprite;
 import com.android.herodefender.sprite.ButtonSprite;
 import com.android.herodefender.sprite.FrameSprite;
 import com.android.herodefender.sprite.Item;
+import com.android.herodefender.sprite.Sprite;
 import com.android.herodefender.sprite.WordSprite;
 
 public class WinModel extends CoreModel
@@ -24,6 +25,7 @@ public class WinModel extends CoreModel
 	{
 		super(gameBean);
 	}
+	@Override
 	public void init()
 	{
 		backgroundSprite=new BackgroundSprite(this.getImageConfig());
@@ -52,6 +54,7 @@ public class WinModel extends CoreModel
 		talkSprite.setTalk(GameConsts.TALK_WIN_TEXT[scriptInt]);
 		talkSprite.setState(FrameSprite.START);
 	}
+	@Override
 	public void updateView(long viewTime)
 	{
 		if(subState==WIN)
@@ -59,6 +62,7 @@ public class WinModel extends CoreModel
 			talkSprite.update();
 		}
 	}
+	@Override
 	public void update()
 	{	
 		if(subState==WIN)
@@ -71,6 +75,7 @@ public class WinModel extends CoreModel
 			buttonSprite.update();
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(subState==WIN)
@@ -81,12 +86,15 @@ public class WinModel extends CoreModel
 			buttonSprite.drawView(canvas);
 		}
 	}
+	@Override
 	public void onKeyDown(int keyCode)
 	{
 	}
+	@Override
 	public void onKeyUp(int keyCode)
 	{
 	}
+	@Override
 	public void onTouchEvent(int x, int y, MotionEvent event, int touchState)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
@@ -103,7 +111,7 @@ public class WinModel extends CoreModel
 	}
 	private void touchDown()
 	{
-		if(buttonSprite.getState()==ButtonSprite.DISABLE)
+		if(buttonSprite.getState()==Sprite.DISABLE)
 		{
 			if(talkSprite.getState()==FrameSprite.STAY)
 			{
@@ -119,6 +127,7 @@ public class WinModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void onBackKeyDown()
 	{
 		if(buttonSprite.getState()==ButtonSprite.STAY)

@@ -25,6 +25,7 @@ public class DoorSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if (state == UP)
@@ -72,6 +73,7 @@ public class DoorSprite extends Sprite
 			this.setCollisionArea(GameConsts.DOOR_COLLISION[2]);
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == UP)

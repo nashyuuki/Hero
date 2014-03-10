@@ -28,6 +28,7 @@ public class AirSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if (state == GATHER)
@@ -38,6 +39,7 @@ public class AirSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == MOVE)

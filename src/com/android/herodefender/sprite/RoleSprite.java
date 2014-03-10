@@ -16,6 +16,7 @@ public class RoleSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if(state==STAY)
@@ -23,6 +24,7 @@ public class RoleSprite extends Sprite
 			this.nextScriptInt(GameConsts.BARRIER_ROLE_SCRIPT[type].length);
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==STAY)

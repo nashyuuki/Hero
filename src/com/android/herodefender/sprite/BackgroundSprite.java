@@ -16,6 +16,7 @@ public class BackgroundSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == GAME)

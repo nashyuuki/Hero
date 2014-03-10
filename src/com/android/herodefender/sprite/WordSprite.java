@@ -1,8 +1,6 @@
 package com.android.herodefender.sprite;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-
 import com.android.herodefender.GameConsts;
 import com.android.herodefender.config.ImageConfig;
 
@@ -36,6 +34,7 @@ public class WordSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if(state==HERO||state==WIN)
@@ -63,6 +62,7 @@ public class WordSprite extends Sprite
 		}
 	}
 	
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==WIN)

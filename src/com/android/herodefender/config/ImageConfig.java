@@ -2,9 +2,6 @@ package com.android.herodefender.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,8 +13,6 @@ import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-
 import com.android.herodefender.Consts;
 import com.game.herodefender.R;
 

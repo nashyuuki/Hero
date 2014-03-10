@@ -68,6 +68,7 @@ public class FrameSprite extends Sprite
 	{
 		super(gameBean);
 	}
+	@Override
 	public void update()
 	{
 		if(state==START)
@@ -79,6 +80,7 @@ public class FrameSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==BIG)
@@ -169,6 +171,7 @@ public class FrameSprite extends Sprite
 	{
 		this.talk = talk;
 	}
+	@Override
 	public void setState(int state)
 	{
 		if(state==START)

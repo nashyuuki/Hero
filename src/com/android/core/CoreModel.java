@@ -3,8 +3,6 @@ package com.android.core;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -107,7 +105,8 @@ public abstract class CoreModel
     {
         new Thread() 
         {
-            public void run() 
+            @Override
+			public void run() 
             {
             	gameBean.getHandler().sendEmptyMessage(View.GONE);
             }
@@ -117,7 +116,8 @@ public abstract class CoreModel
     {
         new Thread() 
         {
-            public void run() 
+            @Override
+			public void run() 
             {
             	gameBean.getHandler().sendEmptyMessage(View.VISIBLE);
             }

@@ -28,6 +28,7 @@ public class SelectSprite extends Sprite
 		super(imageConfig);
 	}
 
+	@Override
 	public void update()
 	{
 		if(state==SELECT)
@@ -35,6 +36,7 @@ public class SelectSprite extends Sprite
 			this.setState(SELECT_END);
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==STAY)

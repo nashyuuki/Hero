@@ -8,8 +8,8 @@ import com.android.core.GameBean;
 import com.android.herodefender.config.ModelConfig;
 import com.android.herodefender.config.MusicConfig;
 import com.android.herodefender.sprite.BackgroundSprite;
-import com.android.herodefender.sprite.ButtonSprite;
 import com.android.herodefender.sprite.EffectSprite;
+import com.android.herodefender.sprite.Sprite;
 import com.android.herodefender.sprite.TeamSprite;
 import com.android.herodefender.sprite.WordSprite;
 
@@ -28,6 +28,7 @@ public class LobbyModel extends CoreModel
 	{
 		super(gameBean);
 	}
+	@Override
 	public void init()
 	{
 		backgroundSprite=new BackgroundSprite(this.getImageConfig());
@@ -59,6 +60,7 @@ public class LobbyModel extends CoreModel
 		this.playMusic(MusicConfig.MUSIC01);
 		
 	}
+	@Override
 	public void updateView(long viewTime)
 	{
 		if(subState==EFFECT)
@@ -74,6 +76,7 @@ public class LobbyModel extends CoreModel
 			teamSprite.update();
 		}
 	}
+	@Override
 	public void update()
 	{
 		if(subState==LOBBY)
@@ -109,6 +112,7 @@ public class LobbyModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(subState==EFFECT||subState==LOBBY||subState==PUSH||subState==TEAM)
@@ -123,15 +127,18 @@ public class LobbyModel extends CoreModel
 			effectSprite.drawView(canvas);
 		}
 	}
+	@Override
 	public void onKeyDown(int keyCode)
 	{
 		
 	}
+	@Override
 	public void onKeyUp(int keyCode)
 	{
 		
 	}
 	
+	@Override
 	public void onTouchEvent(int x, int y, MotionEvent event, int touchState)
 	{
 		if(subState==LOBBY)
@@ -173,11 +180,12 @@ public class LobbyModel extends CoreModel
 		{
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 			{
-				teamSprite.setState(TeamSprite.DISABLE);
+				teamSprite.setState(Sprite.DISABLE);
 				subState=LOBBY;
 			}
 		}
 	}
+	@Override
 	public void onBackKeyDown()
 	{
 		if(subState==LOBBY)
@@ -196,7 +204,7 @@ public class LobbyModel extends CoreModel
 		}
 		else if(subState==TEAM)
 		{
-			teamSprite.setState(TeamSprite.DISABLE);
+			teamSprite.setState(Sprite.DISABLE);
 			subState=LOBBY;
 		}
 	}

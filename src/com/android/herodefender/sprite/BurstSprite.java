@@ -22,6 +22,7 @@ public class BurstSprite extends Sprite
 		super(imageConfig);
 		random=new Random();
 	}
+	@Override
 	public void update()
 	{
 		if (state == BURST)
@@ -50,6 +51,7 @@ public class BurstSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == BURST)

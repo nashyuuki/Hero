@@ -1,13 +1,9 @@
 package com.android.core;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -45,6 +41,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 		running = false;
 		change=false;
 	}
+	@Override
 	public void surfaceChanged(SurfaceHolder holder, int arg1, int width, int height)
 	{
 		if (running&&!change)
@@ -78,6 +75,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	}
 	
 	
+	@Override
 	public void surfaceCreated(SurfaceHolder holder)
 	{
 		setFocusable(true); // make sure we get key events
@@ -117,11 +115,13 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 			thread.start();
 		}
 	}
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder)
 	{
 		change=false;
 		this.pause();
 	}
+	@Override
 	public void run()
 	{
 		while (running)
@@ -255,6 +255,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 	{
 		return musciConfig;
 	}
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		int state = gameBean.getState();
@@ -267,6 +268,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 		return super.onKeyDown(keyCode, event);
 	}
 
+	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event)
 	{
 		int state = gameBean.getState();
@@ -289,6 +291,7 @@ public class CoreController extends SurfaceView implements SurfaceHolder.Callbac
 			coreModel.onBackKeyDown();
 		}
 	}
+	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		int state = gameBean.getState();

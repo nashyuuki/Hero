@@ -79,6 +79,7 @@ public class GameModel extends CoreModel
 		super(gameBean);
 	}
 
+	@Override
 	public void init()
 	{
 		this.loadImage(ImageConfig.GAME_LOAD);
@@ -430,6 +431,7 @@ public class GameModel extends CoreModel
 		}
 		return false;
 	}
+	@Override
 	public void updateView(long viewTime)
 	{
 		if(subState==TEACH)
@@ -956,14 +958,14 @@ public class GameModel extends CoreModel
 	{
 		for(int j=0;j<selects[layer].length;j++)
 		{
-			selects[layer][j].setState(SelectSprite.DISABLE);
+			selects[layer][j].setState(Sprite.DISABLE);
 		}
 		int bombInt=barSprite.getBombInt();
 		if(bombInt<=0)
 		{
 			for(int k=0;k<selects.length;k++)
 			{
-				selects[k][SelectSprite.INT_BOMB].setState(SelectSprite.DISABLE);
+				selects[k][SelectSprite.INT_BOMB].setState(Sprite.DISABLE);
 			}
 		}
 	}
@@ -986,6 +988,7 @@ public class GameModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void update()
 	{
 		if (subState == START)
@@ -1100,7 +1103,7 @@ public class GameModel extends CoreModel
 							}
 							if(teachMode)
 							{
-								selectSprite.setState(SelectSprite.DISABLE);
+								selectSprite.setState(Sprite.DISABLE);
 							}
 							else
 							{
@@ -1383,7 +1386,7 @@ public class GameModel extends CoreModel
 					scriptInt++;
 					if(script[1]==MonsterSprite.TYPE_TEACH)
 					{
-						if(script[2]==FrameSprite.DISABLE)
+						if(script[2]==Sprite.DISABLE)
 						{
 							this.disableSelect();
 							teachMode=true;
@@ -1469,7 +1472,7 @@ public class GameModel extends CoreModel
 		else if (subState == WIN||subState == FAILURE)
 		{
 			reallySprite.update();
-			if(buttonSprite.getState()==ButtonSprite.DISABLE)
+			if(buttonSprite.getState()==Sprite.DISABLE)
 			{
 				if(reallySprite.getState()==UiSprite.WIN_END||reallySprite.getState()==UiSprite.LOSE_END)
 				{
@@ -1510,7 +1513,7 @@ public class GameModel extends CoreModel
 		{
 			for(int j=0;j<selects[i].length;j++)
 			{
-				selects[i][j].setState(SelectSprite.DISABLE);
+				selects[i][j].setState(Sprite.DISABLE);
 			}
 		}
 	}
@@ -1768,16 +1771,19 @@ public class GameModel extends CoreModel
 		}
 	}
 
+	@Override
 	public void onKeyDown(int keyCode)
 	{
 
 	}
 
+	@Override
 	public void onKeyUp(int keyCode)
 	{
 
 	}
 
+	@Override
 	public void onTouchEvent(int x, int y, MotionEvent event, int touchState)
 	{
 		if (subState == PLAY)
@@ -1915,7 +1921,7 @@ public class GameModel extends CoreModel
 						doors[0].setSelectTpye(DoorSprite.TYPE_NONE);
 						doors[0].setMoveType(DoorSprite.MID_UP);
 						this.playMusic(MusicConfig.DOOR);
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 						subState=PLAY;
 					}
 					else
@@ -1930,7 +1936,7 @@ public class GameModel extends CoreModel
 						doors[0].setSelectTpye(DoorSprite.TYPE_NONE);
 						doors[0].setMoveType(DoorSprite.UP_MID);
 						this.playMusic(MusicConfig.DOOR);
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 						subState=PLAY;
 					}
 					else
@@ -1948,7 +1954,7 @@ public class GameModel extends CoreModel
 					if(selects[1][SelectSprite.INT_WEAPON].isCollision(x, y))
 					{
 						selects[1][SelectSprite.INT_WEAPON].setState(SelectSprite.SELECT);
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 						subState=PLAY;
 					}
 					else
@@ -1961,7 +1967,7 @@ public class GameModel extends CoreModel
 					if(selects[1][SelectSprite.INT_BOMB].isCollision(x, y))
 					{
 						selects[1][SelectSprite.INT_BOMB].setState(SelectSprite.SELECT);
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 						subState=PLAY;
 					}
 					else
@@ -1974,7 +1980,7 @@ public class GameModel extends CoreModel
 					if(selects[1][SelectSprite.INT_BOOM].isCollision(x, y))
 					{
 						selects[1][SelectSprite.INT_BOOM].setState(SelectSprite.SELECT);
-						talkSprite.setState(FrameSprite.DISABLE);
+						talkSprite.setState(Sprite.DISABLE);
 						subState=PLAY;
 					}
 					else
@@ -2004,11 +2010,13 @@ public class GameModel extends CoreModel
 			subState = perState;
 		}
 	}
+	@Override
 	public void pause()
 	{
 		menuPause();
 	}
 
+	@Override
 	public void onBackKeyDown()
 	{
 		if(subState== FAILURE ||subState == WIN)

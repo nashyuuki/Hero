@@ -5,11 +5,10 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -25,6 +24,7 @@ public class MainActivity extends Activity
 	private CoreController core;
 	private GameBean gameBean;
 	private AdView adView;
+	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -42,8 +42,8 @@ public class MainActivity extends Activity
 		windowParams.gravity = Gravity.TOP;
 		windowParams.x = 0;
 		windowParams.y = 0;
-		windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-		windowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		windowParams.height = LayoutParams.WRAP_CONTENT;
+		windowParams.width = LayoutParams.WRAP_CONTENT;
 		windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 		  | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL 
 		  | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
@@ -66,23 +66,27 @@ public class MainActivity extends Activity
 		wm.addView(adView, windowParams);
 		Handler handler = new Handler() 
 		{
-	        public void handleMessage(Message msg) 
+	        @Override
+			public void handleMessage(Message msg) 
 	        {
 	        	adView.setVisibility(msg.what);                
 	        }
 	    };
 	    gameBean.setHandler(handler);
 	}
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	@Override
 	protected void onPause()
 	{
 		core.pause();
 		super.onPause();
 	}
+	@Override
 	protected void onDestroy()
 	{
 		if (adView != null) 
@@ -93,12 +97,14 @@ public class MainActivity extends Activity
 		gameBean.getImageConfig().resetDrawables();
 		super.onDestroy();
 	}
+	@Override
 	protected void onResume()
 	{
 		core.resume();
 		super.onResume();
 	}
 
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if(keyCode==KeyEvent.KEYCODE_BACK)

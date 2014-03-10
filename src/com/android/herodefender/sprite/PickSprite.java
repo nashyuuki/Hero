@@ -16,6 +16,7 @@ public class PickSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if(state==LEFT)
@@ -45,6 +46,7 @@ public class PickSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==STAY)

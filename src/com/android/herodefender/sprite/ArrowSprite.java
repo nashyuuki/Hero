@@ -68,6 +68,7 @@ public class ArrowSprite extends Sprite
 		}
 	}
 	
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == MOVE)

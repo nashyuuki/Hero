@@ -1,7 +1,6 @@
 package com.android.herodefender;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.android.core.CoreModel;
@@ -13,6 +12,7 @@ import com.android.herodefender.sprite.ButtonSprite;
 import com.android.herodefender.sprite.FrameSprite;
 import com.android.herodefender.sprite.Item;
 import com.android.herodefender.sprite.Monster;
+import com.android.herodefender.sprite.Sprite;
 import com.android.herodefender.sprite.WordSprite;
 
 public class ResultModel extends CoreModel
@@ -30,6 +30,7 @@ public class ResultModel extends CoreModel
 	{
 		super(gameBean);
 	}
+	@Override
 	public void init()
 	{
 		Monster[] monster=gameBean.getMonster();
@@ -160,6 +161,7 @@ public class ResultModel extends CoreModel
 			}
 		}
 	}
+	@Override
 	public void updateView(long viewTime)
 	{
 		if(subState==RESULT)
@@ -167,6 +169,7 @@ public class ResultModel extends CoreModel
 			talkSprite.update();
 		}
 	}
+	@Override
 	public void update()
 	{
 		if(subState==RESULT)
@@ -209,6 +212,7 @@ public class ResultModel extends CoreModel
 			buttonSprite.update();
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(subState==RESULT)
@@ -221,14 +225,17 @@ public class ResultModel extends CoreModel
 		}
 	}
 	
+	@Override
 	public void onKeyDown(int keyCode)
 	{
 		
 	}
+	@Override
 	public void onKeyUp(int keyCode)
 	{
 		
 	}
+	@Override
 	public void onTouchEvent(int x, int y, MotionEvent event, int touchState)
 	{
 		if(subState==RESULT)
@@ -244,11 +251,12 @@ public class ResultModel extends CoreModel
 				}
 				if(talkSprite.getState()==FrameSprite.STAY)
 				{
-					talkSprite.setState(FrameSprite.DISABLE);
+					talkSprite.setState(Sprite.DISABLE);
 				}
 			}
 		}
 	}
+	@Override
 	public void onBackKeyDown()
 	{
 		if(buttonSprite.getState()==ButtonSprite.STAY)

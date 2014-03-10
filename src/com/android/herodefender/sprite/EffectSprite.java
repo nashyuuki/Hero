@@ -1,8 +1,6 @@
 package com.android.herodefender.sprite;
 
 import android.graphics.Canvas;
-import android.util.Log;
-
 import com.android.herodefender.Consts;
 import com.android.herodefender.config.ImageConfig;
 
@@ -27,6 +25,7 @@ public class EffectSprite extends Sprite
 				Consts.screenWidth,Consts.screenHeight
 				};
 	}
+	@Override
 	public void update()
 	{
 		if(state==MOVE)
@@ -53,6 +52,7 @@ public class EffectSprite extends Sprite
 			}
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if(state==MOVE)

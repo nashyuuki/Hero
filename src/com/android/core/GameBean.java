@@ -12,15 +12,12 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.view.WindowManager;
-
 import com.android.herodefender.GameConsts;
 import com.android.herodefender.config.ImageConfig;
 import com.android.herodefender.config.ModelConfig;
 import com.android.herodefender.config.MusicConfig;
 import com.android.herodefender.sprite.Item;
 import com.android.herodefender.sprite.Monster;
-import com.google.ads.AdView;
 
 public class GameBean extends Application
 {

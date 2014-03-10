@@ -1,9 +1,6 @@
 package com.android.herodefender.sprite;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-
-import com.android.core.NumberUtil;
 import com.android.herodefender.GameConsts;
 import com.android.herodefender.config.ImageConfig;
 
@@ -101,6 +98,7 @@ public class UiSprite extends Sprite
 	{
 		super(imageConfig);
 	}
+	@Override
 	public void update()
 	{
 		if(state==REALLY)
@@ -152,6 +150,7 @@ public class UiSprite extends Sprite
 			this.nextScriptInt(winEndVerts.length);
 		}
 	}
+	@Override
 	public void drawView(Canvas canvas)
 	{
 		if (state == BAR_START)
